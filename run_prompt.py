@@ -23,7 +23,8 @@ import time
 import json
 
 import datasets
-from datasets import load_dataset, load_metric
+from datasets import load_dataset
+from evaluate import load
 import torch
 import torch.nn.functional as F
 from torch.utils.data.dataloader import DataLoader
@@ -32,7 +33,6 @@ from tqdm.auto import tqdm
 import transformers
 from accelerate import Accelerator
 from transformers import (
-    AdamW,
     AutoConfig,
     AutoTokenizer,
     DataCollatorWithPadding,
@@ -224,7 +224,7 @@ def parse_args():
         help="Experiment ID"
     )
     parser.add_argument(
-        "--temp_path",
+        "--temp_dir",
         type=str,
         default=None,
         help="Experiment ID"
@@ -283,8 +283,6 @@ def trim_batch(
 
 def main():
     args = parse_args()
-    print(args.top_k)
-    print(args.seed)
     
     # Initialize the accelerator. We will let the accelerator handle device placement for us in this example.
     accelerator = Accelerator()
@@ -418,7 +416,7 @@ def main():
             "weight_decay": 0.0,
         },
     ]
-    optimizer = AdamW(optimizer_grouped_parameters, lr=args.learning_rate)
+    optimizer = torch.optim.AdamW(optimizer_grouped_parameters, lr=args.learning_rate)
 
     # Prepare everything with our `accelerator`.
     multi_label_prompting.model, optimizer, train_dataloader, eval_dataloader = accelerator.prepare(
@@ -451,7 +449,7 @@ def main():
     task_name_ = args.task_name
     if (task_name_ == "trump" or task_name_ == "debat"):
         task_name_ = "sst2"
-    metric = load_metric("glue", task_name_, experiment_id = args.exp_id)
+    metric = load(task_metric[args.task_name], experiment_id = args.exp_id)
 
     if args.no_finetune:
         for split in ["dev", "test"] if args.task_name != "mnli" else ["dev", "test_m", "test_mm"]:
@@ -491,8 +489,8 @@ def main():
     best_metric = -1
     best_metric_step = None
     
-    if args.temp_path is not None:
-        pth = args.temp_path + '/' + args.output_dir
+    if args.temp_dir is not None:
+        pth = args.temp_dir + '/' + args.output_dir
     else:
         pth = args.output_dir
     

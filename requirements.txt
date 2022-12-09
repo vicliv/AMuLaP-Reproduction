@@ -3,3 +3,4 @@ accelerate==0.14.0
 pyarrow==10.0.1
 datasets==2.7.1
 sentencepiece==0.1.97
+evaluate==0.3.0
