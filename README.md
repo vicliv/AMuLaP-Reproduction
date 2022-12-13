@@ -10,7 +10,7 @@ You can install all required packages by running the following command:
 pip install -r requirements.txt
 ```
 The requirements where updated from the original paper to match the most recent versions.
-To run Deberta-v2, we need a version of transformers that has not been released yet in [this pull request](https://github.com/huggingface/transformers/pull/18674)
+To run Deberta-v2, we need a version of transformers that has not been released yet in [this pull request](https://github.com/huggingface/transformers/pull/18674).
 Install this version using the followin command:
 ```
 pip install git+https://github.com/nbroad1881/transformers.git@deberta-lm-modifications
@@ -18,9 +18,9 @@ pip install git+https://github.com/nbroad1881/transformers.git@deberta-lm-modifi
 **Note:** Different versions of packages (like `pytorch`, `transformers`, etc.) may lead to different results from the paper. However, the trend should still hold no matter what versions of packages you use.
 
 ## Prepare Data
-We follow the setup in [LM-BFF](https://github.com/princeton-nlp/LM-BFF#prepare-the-data) for few-shot text classification. Therefore, you can follow the same steps to prepare the data.
+We follow the setup in [LM-BFF](https://github.com/princeton-nlp/LM-BFF#prepare-the-data) for few-shot text classification. Therefore, you can follow the same steps to prepare the data. Essentially, the data has to be formatted into k-shot form using the script 'generate_k_shot.py'. In order to work properly with data other than GLUE, Trump, and Debagreement, the new dataset's label format needs to be added to the 'get_label' function in this script.
 
-For the [Trump](https://drive.google.com/file/d/1CUk-aRMWY7R0qc7EO-Bfpt4CdKgUItpx/view?usp=share_link) and [Debagreement](https://scale.com/open-av-datasets/oxford) datasets, prepare it the same way. You can find the datasets by clinking on their name.
+For the [Trump](https://drive.google.com/file/d/1CUk-aRMWY7R0qc7EO-Bfpt4CdKgUItpx/view?usp=share_link) and [Debagreement](https://scale.com/open-av-datasets/oxford) datasets, prepare it the same way. You can find the datasets by clicking on their name.
 
 ## What's new
 - Support for new models: BERT and Deberta-v2
