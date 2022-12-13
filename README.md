@@ -9,7 +9,7 @@ You can install all required packages by running the following command:
 pip install -r requirements.txt
 ```
 The requirements where updated from the original paper to match the most recent versions.
-To run Deberta-v2, we need a version of transformers that has not been released yet in [this pull request](https://github.com/huggingface/transformers/pull/18674)
+To run Deberta-v2, we need a version of transformers that has not been released yet in [this pull request](https://github.com/huggingface/transformers/pull/18674).
 Install this version using the followin command:
 ```
 pip install git+https://github.com/nbroad1881/transformers.git@deberta-lm-modifications
