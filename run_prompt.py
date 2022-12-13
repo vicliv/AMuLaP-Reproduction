@@ -428,6 +428,7 @@ def main():
     # shorter in multiprocess)
 
     k_map = multi_label_prompting.top_k_indices(train_dataloader, eval_dataloader, args.top_k, args.shot_num, args.label_token_mode, args.mapping_path, args.dedup, args.random_k_token)
+    #multi_label_prompting.manual_labeling({0: ["disappointing", "awful", "terrible", "boring", "horrible"], 1: ["amazing", "great", "brilliant", "wonderful", "fantastic"]})
     model = multi_label_prompting.model
     tokenizer = multi_label_prompting.tokenizer
 
@@ -555,10 +556,35 @@ def main():
 
     logger.info(f"early stop at step {best_metric_step}, metric: {best_metric}")
     
-    model = RobertaForPromptFinetuning.from_pretrained(
-        pth, 
-        from_tf=bool(".ckpt" in pth), 
-        config=config,
+    if "roberta" in args.model_name_or_path:
+        model = RobertaForPromptFinetuning.from_pretrained(
+            pth,
+            from_tf=bool(".ckpt" in args.model_name_or_path),
+            config=config,
+        )
+    elif "bert-" in args.model_name_or_path:
+        model = BertForPromptFinetuning.from_pretrained(
+            pth,
+            from_tf=bool(".ckpt" in args.model_name_or_path),
+            config=config,
+        )
+    elif "opt" in args.model_name_or_path:
+        model = OPForPromptFinetuning.from_pretrained(
+            pth,
+            from_tf=bool(".ckpt" in args.model_name_or_path),
+            config=config,
+        )
+    elif "deberta-v2" in args.model_name_or_path:
+        model = DebertaV2ForPromptFinetuning.from_pretrained(
+            pth,
+            from_tf=bool(".ckpt" in args.model_name_or_path),
+            config=config,
+        )
+    else:
+        model = AutoModelForPromptFinetuning.from_pretrained(
+            pth,
+            from_tf=bool(".ckpt" in args.model_name_or_path),
+            config=config,
         )
 
     model.label_token_list = {}

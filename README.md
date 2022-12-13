@@ -8,10 +8,30 @@ You can install all required packages by running the following command:
 ```bash
 pip install -r requirements.txt
 ```
+The requirements where updated from the original paper to match the most recent versions.
+To run Deberta-v2, we need a version of transformers that has not been released yet in [this pull request](https://github.com/huggingface/transformers/pull/18674)
+Install this version using the followin command:
+```
+pip install git+https://github.com/nbroad1881/transformers.git@deberta-lm-modifications
+```
 **Note:** Different versions of packages (like `pytorch`, `transformers`, etc.) may lead to different results from the paper. However, the trend should still hold no matter what versions of packages you use.
 
 ## Prepare Data
 We follow the setup in [LM-BFF](https://github.com/princeton-nlp/LM-BFF#prepare-the-data) for few-shot text classification. Therefore, you can follow the same steps to prepare the data.
+
+For the [Trump](https://drive.google.com/file/d/1CUk-aRMWY7R0qc7EO-Bfpt4CdKgUItpx/view?usp=share_link) and [Debagreement](https://scale.com/open-av-datasets/oxford) datasets, prepare it the same way. You can find the datasets by clinking on their name.
+
+## What's new
+- Support for new models: BERT and Deberta-v2
+- Manual prompting
+- Easy way to get the results using get_results.py
+- New arguments
+- Created a MultiLabelPrompting class for modularity
+- Updated package versions to avoid deprecation warnings and support new models
+- Added support for Debagreement and Trump datasets
+
+## Notes about Release
+Since the method can highly vary in term of code implementation depending on the dataset, it is difficult to create a PyPi package for a standalone library. This is why the code is self-contained in this repository.
 
 ## Run AMuLaP
 ### Quick Start
@@ -35,6 +55,7 @@ python run_prompt.py \
     --max_seq_len 128 \
     --template *cls**sent_0*_It_was*mask*.*sep+* \
     --dedup
+    AMuLaP
 ```
 
 Most arguments are inherited from `transformers` and are easy to understand. We further explain the AMuLaP arguments below (some are not shown in the example):

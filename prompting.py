@@ -56,6 +56,16 @@ class MultiLabelPrompting(object):
 
         return optimizer(optimizer_grouped_parameters, lr=lr)
     
+    def manual_labeling(self, labels):
+        self.model.label_token_list = {}
+        for key in self.label2id:
+            label = self.label2id[key]
+            
+            tokens = []
+            for l in labels[label]:
+                tokens.append(self.tokenizer(l).input_ids[1])
+            self.model.label_token_list[label] = torch.tensor(tokens).long().cuda()
+    
     def top_k_indices(self, train_dataloader, eval_dataloader, top_k, shot_num, label_mode = "AMuLaP", mapping_path = None, dedup = False, random_k_token = False):        
         # get top-k token index
         k_map = {}
@@ -164,6 +174,7 @@ class MultiLabelPrompting(object):
                 k_map[label] = label_to_word[label][:top_k]
         
         self.model.label_token_list = {}
+
         for key in self.label2id:
             label = self.label2id[key]
             self.model.label_token_list[label] = torch.tensor(k_map[label]).long().cuda()

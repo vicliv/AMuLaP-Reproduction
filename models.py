@@ -5,7 +5,7 @@ import transformers
 from transformers.modeling_utils import PreTrainedModel
 from transformers.models.bert.modeling_bert import BertPreTrainedModel, BertModel, BertOnlyMLMHead
 from transformers.models.roberta.modeling_roberta import RobertaPreTrainedModel, RobertaModel, RobertaLMHead, RobertaClassificationHead
-from transformers.models.deberta_v2.modeling_deberta_v2 import DebertaV2PreTrainedModel, DebertaV2Model, DebertaV2OnlyMLMHead, DebertaV2ForMaskedLM
+from transformers.models.deberta_v2.modeling_deberta_v2 import DebertaV2PreTrainedModel, DebertaV2Model, NewDebertaV2OnlyMLMHead, NewDebertaV2ForMaskedLM
 from transformers.models.opt.modeling_opt import OPTPreTrainedModel, OPTModel
 from transformers import AutoModelWithLMHead, AutoModel
 
@@ -135,11 +135,36 @@ class DebertaV2ForPromptFinetuning(DebertaV2PreTrainedModel):
 
     def __init__(self, config):
         super().__init__(config)
-        self.model = DebertaV2ForMaskedLM(config)
-        self.cls = None
-        self.init_weights()
+        self.deberta = DebertaV2Model(config)
+        self.lm_predictions = NewDebertaV2OnlyMLMHead(config)
+        self.post_init()
 
         self.label_token_list = None
+    
+    def resize_token_embeddings(self, new_num_tokens: int):
+
+        old_bias = self.lm_predictions.lm_head.bias.data
+
+        new_bias = nn.Parameter(torch.zeros(new_num_tokens))
+
+        # If there are more tokens, will transfer all of old values
+        # If there are fewer tokens, will transfer some of old values
+        num_to_transfer = min(len(old_bias), new_num_tokens)
+        new_bias.data[:num_to_transfer] = old_bias[:num_to_transfer]
+
+        old_embeddings = self.get_input_embeddings()
+        new_embeddings = self._get_resized_embeddings(old_embeddings, new_num_tokens)
+        self.set_input_embeddings(new_embeddings)
+
+        self.lm_predictions.lm_head.bias = new_bias
+
+        return self.get_input_embeddings()
+
+    def get_output_embeddings(self):
+        return None
+
+    def set_output_embeddings(self, new_embeddings):
+        return None
 
     def forward(
         self,
@@ -148,7 +173,7 @@ class DebertaV2ForPromptFinetuning(DebertaV2PreTrainedModel):
         mask_pos=None,
         labels=None,
     ):
-        return forward_function(self.model, self.cls, self.label_token_list, input_ids, attention_mask, mask_pos, labels)
+       return forward_function(self.deberta, lambda x: self.lm_predictions(x, self.deberta.embeddings.word_embeddings), self.label_token_list, input_ids, attention_mask, mask_pos, labels)
     
 
 class OPTForPromptFinetuning(OPTPreTrainedModel):
