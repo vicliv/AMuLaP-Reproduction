@@ -33,7 +33,13 @@ def get_label(task, line):
         else:
             raise NotImplementedError
     else:
-        return line[0]
+        if task == 'trump':
+          return line[1]
+        elif task == 'debagreement':
+          return line[2]
+        else:
+          print("assuming label is in the first columnn when generating k-shot dat. change get_label function in generate_k_shot_data.py otherwise.")
+          return line[0]
 
 def load_datasets(data_dir, tasks):
     datasets = {}
@@ -66,6 +72,7 @@ def load_datasets(data_dir, tasks):
 def split_header(task, lines):
     """
     Returns if the task file has a header or not. Only for GLUE tasks.
+    Make sure that other datasets don't have a header.
     """
     if task in ["CoLA"]:
         return [], lines
