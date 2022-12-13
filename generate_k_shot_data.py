@@ -35,7 +35,7 @@ def get_label(task, line):
     else:
         if task == 'trump':
           return line[1]
-        elif task == 'debagreement':
+        elif task == 'debat':
           return line[2]
         else:
           print("assuming label is in the first columnn when generating k-shot dat. change get_label function in generate_k_shot_data.py otherwise.")
