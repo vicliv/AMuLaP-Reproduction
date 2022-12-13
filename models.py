@@ -5,7 +5,7 @@ import transformers
 from transformers.modeling_utils import PreTrainedModel
 from transformers.models.bert.modeling_bert import BertPreTrainedModel, BertModel, BertOnlyMLMHead
 from transformers.models.roberta.modeling_roberta import RobertaPreTrainedModel, RobertaModel, RobertaLMHead, RobertaClassificationHead
-from transformers.models.deberta_v2.modeling_deberta_v2 import DebertaV2PreTrainedModel, DebertaV2Model, NewDebertaV2OnlyMLMHead, NewDebertaV2ForMaskedLM
+from transformers.models.deberta_v2.modeling_deberta_v2 import DebertaV2PreTrainedModel, DebertaV2Model
 from transformers.models.opt.modeling_opt import OPTPreTrainedModel, OPTModel
 from transformers import AutoModelWithLMHead, AutoModel
 
@@ -136,7 +136,7 @@ class DebertaV2ForPromptFinetuning(DebertaV2PreTrainedModel):
     def __init__(self, config):
         super().__init__(config)
         self.deberta = DebertaV2Model(config)
-        self.lm_predictions = NewDebertaV2OnlyMLMHead(config)
+        self.lm_predictions = transformers.models.deberta_v2.modeling_deberta_v2.NewDebertaV2OnlyMLMHead(config)
         self.post_init()
 
         self.label_token_list = None
@@ -177,7 +177,7 @@ class DebertaV2ForPromptFinetuning(DebertaV2PreTrainedModel):
     
 
 class OPTForPromptFinetuning(OPTPreTrainedModel):
-
+    # THIS MODEL DOES NOT WORK SINCE IT WAS NOT TRAINED FOR MASK MODELING
     def __init__(self, config):
         super().__init__(config)
         self.num_labels = config.num_labels

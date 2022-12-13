@@ -4,3 +4,5 @@ pyarrow==10.0.1
 datasets==2.7.1
 sentencepiece==0.1.97
 evaluate==0.3.0
+sklearn==0.0.post1
+scikit-learn==1.0.2

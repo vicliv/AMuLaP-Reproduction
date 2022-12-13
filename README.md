@@ -1,5 +1,6 @@
 # AMuLaP (Automatic Multi-Label Prompting)
-Code for NAACL 2022 paper [Automatic Multi-Label Prompting: Simple and Interpretable Few-Shot Classification](https://arxiv.org/abs/2204.06305).
+Code for the reproduction of the NAACL 2022 paper [Automatic Multi-Label Prompting: Simple and Interpretable Few-Shot Classification](https://arxiv.org/abs/2204.06305).
+Following are instructions to run the code.
 
 ![image](https://user-images.githubusercontent.com/36069169/173464393-2bc9cf3d-c1fb-4ab6-b0d4-613dfe9198c6.png)
 
