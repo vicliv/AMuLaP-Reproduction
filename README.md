@@ -19,7 +19,7 @@ pip install git+https://github.com/nbroad1881/transformers.git@deberta-lm-modifi
 ## Prepare Data
 We follow the setup in [LM-BFF](https://github.com/princeton-nlp/LM-BFF#prepare-the-data) for few-shot text classification. Therefore, you can follow the same steps to prepare the data.
 
-For the [Trump](https://drive.google.com/file/d/1CUk-aRMWY7R0qc7EO-Bfpt4CdKgUItpx/view?usp=share_link) and [Debagreement](https://scale.com/open-av-datasets/oxford) datasets, prepare it the same way. You can find the datasets by clinking on their name.
+For the [Trump](https://drive.google.com/file/d/1CUk-aRMWY7R0qc7EO-Bfpt4CdKgUItpx/view?usp=share_link) and [Debagreement](https://scale.com/open-av-datasets/oxford) datasets, prepare it the same way. You can find the datasets by clicking on their name.
 
 ## What's new
 - Support for new models: BERT and Deberta-v2
