@@ -136,7 +136,11 @@ class DebertaV2ForPromptFinetuning(DebertaV2PreTrainedModel):
     def __init__(self, config):
         super().__init__(config)
         self.deberta = DebertaV2Model(config)
-        self.lm_predictions = transformers.models.deberta_v2.modeling_deberta_v2.NewDebertaV2OnlyMLMHead(config)
+        try:
+            self.lm_predictions = transformers.models.deberta_v2.modeling_deberta_v2.NewDebertaV2OnlyMLMHead(config)
+        except:
+            print("You are not using the correct version to run DeBERTa-v2, refer to the README.md")
+            exit(exit)
         self.post_init()
 
         self.label_token_list = None
